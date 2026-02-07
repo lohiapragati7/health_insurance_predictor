@@ -3,8 +3,9 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-# load trained model
-model = pickle.load(open("model.pkl", "rb"))
+import os
+model_path = os.path.join(os.path.dirname(__file__), "model.pkl")
+model = pickle.load(open(model_path, "rb"))
 
 st.title("Insurance Cost Predictor")
 
