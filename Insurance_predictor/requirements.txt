@@ -1,5 +1,6 @@
-- Python
-- Pandas
-- NumPy
-- Matplotlib / Seaborn 
-- Scikit-learn
+streamlit
+pandas
+numpy
+matplotlib / seaborn
+scikit-learn
+joblib
