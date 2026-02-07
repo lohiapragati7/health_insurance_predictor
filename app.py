@@ -2,7 +2,8 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-model = pickle.load(open("model.pkl", "rb"))
+import joblib
+model = joblib.load("model.pkl")
 
 st.title("Insurance Cost Predictor")
 
