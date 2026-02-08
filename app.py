@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 # ======================================
-# Page Configuration
+# PAGE CONFIG
 # ======================================
 st.set_page_config(
     page_title="Insurance Charges Estimator",
@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # ======================================
-# Load Model (cached for speed)
+# LOAD MODEL (fast + cached)
 # ======================================
 @st.cache_resource
 def load_model():
@@ -23,19 +23,19 @@ model = load_model()
 
 
 # ======================================
-# Title
+# TITLE
 # ======================================
 st.title("💰 Health Insurance Charges Estimator")
-st.write("Predict expected medical insurance charges using Machine Learning")
+st.write("Predict expected insurance claim charges using Machine Learning")
 
 st.divider()
 
 
 # ======================================
-# USER INPUTS
+# INPUT UI
 # ======================================
 
-st.subheader("👤 Personal Information")
+st.subheader("👤 Personal Info")
 c1, c2, c3 = st.columns(3)
 
 with c1:
@@ -94,7 +94,7 @@ st.divider()
 
 
 # ======================================
-# ENCODING (same as training)
+# ENCODING (must match training)
 # ======================================
 sex = 1 if sex == "male" else 0
 smoker = 1 if smoker == "Yes" else 0
@@ -105,7 +105,6 @@ region_map = {
     "southeast": 2,
     "southwest": 3
 }
-
 region = region_map[region]
 
 
@@ -115,7 +114,7 @@ region = region_map[region]
 
 if st.button("🚀 Predict Charges", use_container_width=True):
 
-    # SAFE → using column names (prevents order bugs)
+    # SAFE dataframe using column names
     input_data = pd.DataFrame([{
         "age": age,
         "sex": sex,
@@ -131,21 +130,26 @@ if st.button("🚀 Predict Charges", use_container_width=True):
         "region": region
     }])
 
-    # Predict
-    prediction = model.predict(input_data)[0]
+    raw_pred = model.predict(input_data)[0]
 
-    # ✅ FORCE POSITIVE OUTPUT (industry standard)
-    prediction = max(0, prediction)
+    # ======================================
+    # FINAL SAFE LOGIC
+    # ======================================
+    # abs() removes negatives
+    # max(500, ...) removes zeros/small values
+    prediction = max(500, abs(raw_pred))
 
     st.success(f"### 💵 Estimated Insurance Charges: ₹ {round(prediction, 2)}")
     st.balloons()
 
 
 # ======================================
-# Footer
+# FOOTER
 # ======================================
 st.divider()
 st.caption("Built with ❤️ using Streamlit • Scikit-learn • Python")
+
+
 
 
 
